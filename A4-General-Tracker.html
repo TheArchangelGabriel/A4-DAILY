@@ -4770,18 +4770,9 @@ function renderQuadrant() {
       return !!(qc && qc.follow && qc.follow.trim());
     })();
     flagBtnPool.style.cssText = 'background:none;border:none;color:' + (poolFlagged ? 'rgba(147,51,234,0.9)' : 'rgba(147,51,234,0.2)') + ';font-size:13px;cursor:pointer;padding:0 4px;flex-shrink:0;-webkit-tap-highlight-color:transparent';
-    (function(tid) {
-      flagBtnPool.onclick = function() {
-        if (!S.taskContext) S.taskContext = {};
-        if (!S.taskContext[tid]) S.taskContext[tid] = {};
-        var q = S.quadrant && S.quadrant[tid];
-        var qkey = 'q' + (q || '1');
-        if (!S.taskContext[tid][qkey]) S.taskContext[tid][qkey] = {};
-        var cur = S.taskContext[tid][qkey].follow || '';
-        S.taskContext[tid][qkey].follow = cur.trim() ? '' : '⚑';
-        save(); renderQuadrant();
-      };
-    })(t.id);
+    (function(tid, tname, tpri, tisGoal, btn) {
+      btn.onclick = function() { openEditTask(tid, tname, tpri, tisGoal); };
+    })(t.id, t.name, t.priority || 'mid', t._isGoal, flagBtnPool);
 
     var btnRow = document.createElement('div');
     btnRow.className = 'qpool-assign-row';
